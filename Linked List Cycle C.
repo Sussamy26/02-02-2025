@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Definition for singly-linked list.
+    typedef struct ListNode {
+    int val;
+    struct ListNode *next;
+} ListNode;
+
+// Function to detect cycle in a linked list
+int hasCycle(ListNode *head) {
+    if (head == NULL || head->next == NULL) {
+        return 0; // No cycle
+    }
+    
+    ListNode *slow = head;
+    ListNode *fast = head;
+    
+    while (fast != NULL && fast->next != NULL) {
+        slow = slow->next;          // Move slow by 1 step
+        fast = fast->next->next;    // Move fast by 2 steps
+        
+        if (slow == fast) {
+            return 1; // Cycle detected
+        }
+    }
+    return 0; // No cycle
+}
+
+// Helper function to create a new node
+ListNode* newNode(int val) {
+    ListNode* node = (ListNode*)malloc(sizeof(ListNode));
+    node->val = val;
+    node->next = NULL;
+    return node;
+}
+
+int main() {
+    // Creating a linked list with a cycle
+    ListNode *head = newNode(3);
+    ListNode *second = newNode(2);
+    ListNode *third = newNode(0);
+    ListNode *fourth = newNode(-4);
+    
+    head->next = second;
+    second->next = third;
+    third->next = fourth;
+    fourth->next = second; // Creating a cycle
+    
+    if (hasCycle(head)) {
+        printf("True\n");
+    } else {
+        printf("False\n");
+    }
+    
+    return 0;
+}
